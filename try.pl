@@ -171,7 +171,6 @@ gen_diff(A, B) :-
 
 
 /* 3A */
-
 lexLT(Xs,Ys,Cnf):-
         lexLT2(Xs,Ys,Cnf1),
         diff(Xs,Ys,CNF2),
@@ -182,3 +181,19 @@ lexLT2([X|Xs], [Y|Ys], Cnf):-
      lexLT(Xs, Ys, Cnf1),
      append([[[-X, Y]], Cnf1], Cnf).
          
+gen_diff2(A, B) :-
+        length(A, 3), 
+        length(B, 3), 
+        lexLT(A, B, CNF),
+        sat(CNF).
+
+/* Task 3B */
+
+matrixLexLt([_], []).
+
+matrixLexLt([Row1, Row2 | Matrix],Cnf):-
+        lexLT(Row1, Row2, Cnf1),
+        matrixLexLt([Row2|Matrix], Cnf2),
+        append([Cnf1, Cnf2], Cnf).
+        
+    
