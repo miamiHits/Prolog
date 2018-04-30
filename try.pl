@@ -117,6 +117,29 @@ zeros([]).
 zeros([0|Rest]):-
     zeros(Rest).
 
+
+/* QUIZ START HERE */
+/* 1A */
+
+nonogram_verify([0], _, []).
+
+nonogram_verify([0], _,[0]).
+
+nonogram_verify([0|Ns], N,[0|Xs]):- 
+    nonogram_verify(Ns, N, Xs).
+
+nonogram_verify([Row|Ns],N,[1|Xs]):-
+    N > 0,
+    Row1 is Row-1,
+    N1 is N-1, 
+    nonogram_verify([Row1|Ns], N1, Xs).
+
+nonogram_verify([Row|Ns], N,[0|Xs]):- 
+    N > 0,
+    N1 is N-1,
+    nonogram_verify([Row|Ns], N1, Xs).
+
+
 /* 2A */  
  /* Direct Encode */
 %(+,-,+)
@@ -196,4 +219,36 @@ matrixLexLt([Row1, Row2 | Matrix],Cnf):-
         matrixLexLt([Row2|Matrix], Cnf2),
         append([Cnf1, Cnf2], Cnf).
         
-    
+/* Task 4a */
+bit_vector(N, Vector):-
+    length(Vector, N),
+    generateVec(Vector, N).
+
+generateVec([], 0).
+
+generateVec([0|V], N):-
+    N > 0,
+    N1 is N-1,
+    generateVec(V, N1).
+
+generateVec([1|V], N):-
+    N > 0,
+    N1 is N-1,
+    generateVec(V, N1).
+
+/* Task 4b */
+apply_network(Cs, _, _):-
+    apply_network(Cs).
+
+apply_network([]).
+
+apply_network([comparator(X1, X2, X1, X2)| Rest]):-
+    X1 >= X2,
+    apply_network(Rest).
+
+apply_network([comparator(X1, X2, X2, X1)| Rest]):-
+        X1 < X2,
+        apply_network(Rest).
+
+/* Task 3c */
+%is_a_sorting network(Cs, In, Out)
