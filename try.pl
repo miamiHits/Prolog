@@ -129,8 +129,7 @@ onlyOneBit([_], []).
 onlyOneBit([X, Y |Xs], CNF):-
     onlyOneBit([X | Xs], CNF1),
     onlyOneBit([Y | Xs], CNF2),
-    append([[[-X, -Y]], CNF1, CNF2], CNF),
-    writeln(CNF).
+    append([[[-X, -Y]], CNF1, CNF2], CNF).
 
 
 /* 2B */ 
@@ -144,7 +143,16 @@ diff(B, [X|Xs], [Y|Ys], CNF):-
 
 diff(_, [], [], []).
 
+/* 2C */
 
+allDiff([], _, []). 
+allDiff([X],N,CNF):- direct(X, N, CNF).
 
+allDiff([X, Y|XXs],N,CNF):-
+    direct(X, N, CNF1),
+    direct(Y, N, CNF2),
+    diff(X, Y, CNF3),
+    allDiff([X|XXs], N, CNF4),
+    allDiff([Y|XXs], N, CNF5),   
+    append([CNF1, CNF2, CNF3, CNF4, CNF5], CNF).
 
-   
