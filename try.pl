@@ -163,18 +163,6 @@ allDiff([X, Y|XXs],N,CNF):-
     allDiff([Y|XXs], N, CNF5),   
     append([CNF1, CNF2, CNF3, CNF4, CNF5], CNF).
 
-diff2([], [], []):- !.
-
-diff2(Xs, Ys, [Bs|CNF]):-
-    gen_diff(Xs, Ys, Bs, CNF - []).
-
-gen_diff([X|Xs], [Y|Ys], [B|Bs], CNF1- CNF3):-
-    CNF1 = [[-B, X, Y], [B, X, -Y], [B, -X, Y], [-B,-X,-Y]|CNF2],
-    gen_diff(Xs, Ys, Bs, CNF2 -CNF3).
-
-gen_diff([], [], [], CNF - CNF).
-
-
 gen_diff(A, B) :-
     length(A, 3), 
     length(B, 3), 
