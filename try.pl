@@ -1,3 +1,6 @@
+:- use_module(naive_sat).
+
+
 /* solve again */
 
 evaluate([],Value, Value).
@@ -136,10 +139,14 @@ onlyOneBit([X, Y |Xs], CNF):-
 diff(Xs,Ys,[[B]|Cnf]):-
     diff(B, Xs, Ys, Cnf).
 
+diff(B, [X], [Y], CNF):-
+        CNF = [[-B, -X, -Y], [-B, X, Y], [B, -X, Y], [B, X, -Y]].
+
 diff(B, [X|Xs], [Y|Ys], CNF):-
     CNF1 = [[-B, -X, -Y, B1], [-B, X, Y, B1], [B, -X, Y], [B, X, -Y], [B, -B1]],
     diff(B1, Xs, Ys, CNF2),
     append(CNF1, CNF2, CNF).
+
 
 diff(_, [], [], []).
 
@@ -156,3 +163,34 @@ allDiff([X, Y|XXs],N,CNF):-
     allDiff([Y|XXs], N, CNF5),   
     append([CNF1, CNF2, CNF3, CNF4, CNF5], CNF).
 
+diff2([], [], []):- !.
+
+diff2(Xs, Ys, [Bs|CNF]):-
+    gen_diff(Xs, Ys, Bs, CNF - []).
+
+gen_diff([X|Xs], [Y|Ys], [B|Bs], CNF1- CNF3):-
+    CNF1 = [[-B, X, Y], [B, X, -Y], [B, -X, Y], [-B,-X,-Y]|CNF2],
+    gen_diff(Xs, Ys, Bs, CNF2 -CNF3).
+
+gen_diff([], [], [], CNF - CNF).
+
+
+gen_diff(A, B) :-
+    length(A, 3), 
+    length(B, 3), 
+    diff(A, B, CNF),
+    sat(CNF).
+
+
+/* 3A */
+
+lexLT(Xs,Ys,Cnf):-
+        lexLT2(Xs,Ys,Cnf1),
+        diff(Xs,Ys,CNF2),
+        append(Cnf1,CNF2,Cnf).   
+
+lexLT2([], [], []).
+lexLT2([X|Xs], [Y|Ys], Cnf):-
+     lexLT(Xs, Ys, Cnf1),
+     append([[[-X, Y]], Cnf1], Cnf).
+         
