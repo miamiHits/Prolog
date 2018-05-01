@@ -88,42 +88,37 @@ checkRow([0],[]).
 % nonogram(Ns,Xs) :- Ns is the list of "blocks" to be
 % placed in list of variables Xs   
     
-nonogram(Ns,N,Xs) :-
-    length(Xs, N),
-    placeBlocks(Ns, Xs).
+% nonogram(Ns,N,Xs) :-
+%     length(Xs, N),
+%     placeBlocks(Ns, Xs).
 
-placeBlocks([[N1],N2|Ns], Xs):-
-    length(Block, N1),
-    ones(Block),
-    append(Block,[0|Rest], Xs),
-    placeBlocks([N2|Ns], Rest).
+% placeBlocks([[N1],N2|Ns], Xs):-
+%     length(Block, N1),
+%     ones(Block),
+%     append(Block,[0|Rest], Xs),
+%     placeBlocks([N2|Ns], Rest).
 
-placeBlocks([[N]], Xs):-
-        length(Block, N),
-        ones(Block),
-        append(Block, Rest, Xs),
-        zeros(Rest).
+% placeBlocks([[N]], Xs):-
+%         length(Block, N),
+%         ones(Block),
+%         append(Block, Rest, Xs),
+%         zeros(Rest).
 
-placeBlocks(Ns, [0|Xs]):-
-    placeBlocks(Ns, Xs).
+% placeBlocks(Ns, [0|Xs]):-
+%     placeBlocks(Ns, Xs).
 
+fill_with_k([], _, 0).
+fill_with_k([H|T], H, N) :- 
+    Nn is N - 1,
+    fill_with_k(T, H, Nn).
 
-
-ones([]).
-ones([1|Rest]):-
-    ones(Rest).
-
-zeros([]).
-zeros([0|Rest]):-
-    zeros(Rest).
 
 
 /* QUIZ START HERE */
 /* 1A */
+nonogram_verify([0], 0, []).
 
-nonogram_verify([0], _, []).
-
-nonogram_verify([0], _,[0]).
+nonogram_verify([0], 1,[0]).
 
 nonogram_verify([0|Ns], N,[0|Xs]):- 
     nonogram_verify(Ns, N, Xs).
@@ -139,7 +134,34 @@ nonogram_verify([Row|Ns], N,[0|Xs]):-
     N1 is N-1,
     nonogram_verify([Row|Ns], N1, Xs).
 
+/* 1B */
 
+nonogram(Ns,N,Xs):-
+    length(Xs, N),   
+    placeBlocks(Ns, Xs).
+
+placeBlocks(Rows,[0|Xs]):-
+    placeBlocks(Rows, Xs).
+
+placeBlocks([Row],Xs):-    
+    length(Block, Row),
+    ones(Block),
+    append(Block, Rest, Xs),
+    zeros(Rest).
+
+placeBlocks([Row|Rows],Xs):-    
+    length(Block, Row),
+    ones(Block),
+    append(Block, [0|Rest], Xs),
+    placeBlocks(Rows, Rest).
+
+ones([]).
+ones([1|Rest]):-
+    ones(Rest).
+
+zeros([]).
+zeros([0|Rest]):-
+    zeros(Rest).
 /* 2A */  
  /* Direct Encode */
 %(+,-,+)
