@@ -83,37 +83,6 @@ checkRow([],[]).
 
 checkRow([0],[]).
 
-
-% one dimentional nonogram
-% nonogram(Ns,Xs) :- Ns is the list of "blocks" to be
-% placed in list of variables Xs   
-    
-% nonogram(Ns,N,Xs) :-
-%     length(Xs, N),
-%     placeBlocks(Ns, Xs).
-
-% placeBlocks([[N1],N2|Ns], Xs):-
-%     length(Block, N1),
-%     ones(Block),
-%     append(Block,[0|Rest], Xs),
-%     placeBlocks([N2|Ns], Rest).
-
-% placeBlocks([[N]], Xs):-
-%         length(Block, N),
-%         ones(Block),
-%         append(Block, Rest, Xs),
-%         zeros(Rest).
-
-% placeBlocks(Ns, [0|Xs]):-
-%     placeBlocks(Ns, Xs).
-
-fill_with_k([], _, 0).
-fill_with_k([H|T], H, N) :- 
-    Nn is N - 1,
-    fill_with_k(T, H, Nn).
-
-
-
 /* QUIZ START HERE */
 /* 1A */
 nonogram_verify([0], 0, []).
@@ -121,7 +90,8 @@ nonogram_verify([0], 0, []).
 nonogram_verify([0], 1,[0]).
 
 nonogram_verify([0|Ns], N,[0|Xs]):- 
-    nonogram_verify(Ns, N, Xs).
+    N1 is N-1,
+    nonogram_verify(Ns, N1, Xs).
 
 nonogram_verify([Row|Ns],N,[1|Xs]):-
     N > 0,
@@ -259,6 +229,19 @@ generateVec([1|V], N):-
     generateVec(V, N1).
 
 /* Task 4b */
+
+comparator(X1, X2, X2, X1):-
+     X1 =< X2.
+
+comparator(X1, X2, T1, T2):-
+    X1>X2,
+    T1 is X1,
+    T2 is X2.
+    
+cs([comparator(X1, X3, T1, T3), comparator(X2, X4, T2, T4),
+comparator(T1, T2, Y1, Y2), comparator(T3, T4, Y3, Y4),
+comparator(Y2, Y3, Z1, Z2)]).
+
 apply_network(Cs, _, _):-
     apply_network(Cs).
 
@@ -269,8 +252,21 @@ apply_network([comparator(X1, X2, X1, X2)| Rest]):-
     apply_network(Rest).
 
 apply_network([comparator(X1, X2, X2, X1)| Rest]):-
-        X1 < X2,
-        apply_network(Rest).
+    X1 < X2,
+    apply_network(Rest).
 
 /* Task 3c */
 %is_a_sorting network(Cs, In, Out)
+
+
+
+% apply_network([comparator(X1, X2, T1, T2) | Rest], In, Out) :-
+%     length(In, N),
+%     length(Out1, N),
+%     nth1(X1i, In, X1),
+%     nth1(X2i, In, X2),
+%     nth1(X1i, Out1, T1),
+%     nth1(X2i, Out1, T2),
+%     apply_network(Rest, Out1, Out).
+    
+%     apply_network([], Out, Out).
