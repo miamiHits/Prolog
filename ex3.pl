@@ -1,3 +1,5 @@
+:- use_module(naive_sat).
+
 /* Part A */
 
 /*task 1*/
