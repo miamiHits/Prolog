@@ -47,7 +47,16 @@ add([X|Xs], [Y|Ys], C, [S|Sum], CNF):-
     append(CNF1, CNF2, CNF).
 
 %we did in class, SUM of 2 Bits 
+%fullAdder(+,+,+,-,-, -)
 fullAdder(X,Y,C,S,NextC, CNF):-
-    CNF = [[X,Y,C,-S], [X, Y, -C, S], [X,-Y,C,S],[X,-Y,-C,-S],[-S,Y,C,S], [-X,Y,-C,-S],[-X,-Y,C,-S],[-X,-Y,-C,S]],
+    %calc S
+    xor( I1, I2, X), and( I1, I2, A1), and( X, C_in, A2),
+    xor( X, C_in, Out), or( A1, A2, C_out).
+
+xor(X, Y, S), and( X, Y, A1), and(S, C, A2),
+xor(S, C, Out), or( A1, A2, C_out).
     %calc NextC
-    xor(X, Y, Res), and(X, Y, A1), and(Res, C, A2), or(A1, A2, NextC).
+    xor(X, Y, Res), and(X, Y, A1), and(Res, C, A2), or(A1, A2, NextC),
+    CNF = [[X,Y,C,-S], [X, Y, -C, S], [X,-Y,C,S],[X,-Y,-C,-S],[-S,Y,C,S], [-X,Y,-C,-S],[-X,-Y,C,-S],[-X,-Y,-C,S]],
+
+   
